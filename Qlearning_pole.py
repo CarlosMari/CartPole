@@ -99,7 +99,7 @@ class Qlearning:
                     self.Qmatrix[stateSIndex + (actionA,)] = self.Qmatrix[stateSIndex + (actionA,)] + self.alpha * error
 
                 stateS = stateSprime
-                print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
+                #print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
                 self.sumRewardsEpisode.append(np.sum(rewardsEpisode))
 
     def simulateLearnedStrategy(self):
@@ -125,6 +125,32 @@ class Qlearning:
                 break
         return obtainedRewards,env1
 
+    def simulateRandomStrategy(self):
+        import gym
+        import time
+        import numpy as np
+        env2 = gym.make('CartPole-v1')
+        (currentState, _) = env2.reset()
+        env2.render()
+        # number of simulation episodes
+        episodeNumber = 100
+        # time steps in every episode
+        timeSteps = 1000
+        # sum of rewards in each episode
+        sumRewardsEpisodes = []
+
+        for episodeIndex in range(episodeNumber):
+            rewardsSingleEpisode = []
+            initial_state = env2.reset()
+            print(episodeIndex)
+            for timeIndex in range(timeSteps):
+                random_action = env2.action_space.sample()
+                observation, reward, terminated, truncated, info = env2.step(random_action)
+                rewardsSingleEpisode.append(reward)
+                if (terminated):
+                    break
+            sumRewardsEpisodes.append(np.sum(rewardsSingleEpisode))
+        return sumRewardsEpisodes, env2
 
 # Note:
 # You can either use gym (not maintained anymore) or gymnasium (maintained version of gym)
