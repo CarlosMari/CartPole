@@ -1,8 +1,6 @@
 import numpy as np
 import gym
 import time
-
-
 class Qlearning:
     ###########################################################################
     #   START - __init__ function
@@ -40,6 +38,7 @@ class Qlearning:
 
         self.Q = np.random.uniform(0, 1, size=(num_bins[0], num_bins[1], num_bins[2], num_bins[3], self.action_number))
 
+    # Observation space is not discrete so we make it discrete
     def returnIndexState(self, state):
         position = state[0]
         velocity = state[1]

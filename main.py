@@ -2,14 +2,14 @@
 import gymnasium as gym
 import numpy as np
 from Qlearning_pole import Qlearning
-import configparser
+import os
 
 # Rendering the environment
 # env=gym.make('CartPole-v1',render_mode='human')
 
 # Non rendering
 import configparser
-import gym
+#import gym
 
 # Load parameters from config file
 config = configparser.ConfigParser()
@@ -66,8 +66,9 @@ plt.plot(Q1.sumRewardsEpisode, color='blue', linewidth=1)
 plt.xlabel('Episode')
 plt.ylabel('Reward')
 plt.yscale('log')
-plt.show()
 plt.savefig('convergence.png')
+plt.show()
+
 
 # close the environment
 env1.close()
