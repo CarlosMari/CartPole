@@ -82,7 +82,6 @@ class Qlearning:
     def simulateEpisodes(self):
         for indexEpisode in range(self.numEpisodes):
             rewardsEpisode = []
-
             (stateS, _) = self.env.reset()
             stateS = list(stateS)
             print(f'Simulating Episode {indexEpisode}')
@@ -106,8 +105,11 @@ class Qlearning:
                     self.Q[stateSIndex + (actionA,)] = self.Q[stateSIndex + (actionA,)] + self.alpha * error
 
                 stateS = stateSprime
-                # print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
-                self.sumRewardsEpisode.append(np.sum(rewardsEpisode))
+
+
+            print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
+            self.sumRewardsEpisode.append(np.sum(rewardsEpisode))
+
 
     def simulateLearnedStrategy(self):
         import gym

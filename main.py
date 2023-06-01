@@ -76,6 +76,7 @@ np.sum(obtainedRewardsOptimal)
 
 # now simulate a random strategy
 (obtainedRewardsRandom, env2) = Q1.simulateRandomStrategy()
+plt.title("Rewards with random strategy")
 plt.hist(obtainedRewardsRandom)
 plt.xlabel('Sum of rewards')
 plt.ylabel('Percentage')
