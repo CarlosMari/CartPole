@@ -7,7 +7,6 @@ My objective is to compare different reinforcement learning ideas from simple al
 - Achieve a working model in which there is evidence that training increases survival time
 - Experiment with different algorithms and compare training time, complexity and achieved score.
 - Fine tune the parameters and required number of bins to achieve an optimal training.
-- 
 
 ### Results
 So far only the only RL algorithm used has been Q-Learning obtaining the following results.
