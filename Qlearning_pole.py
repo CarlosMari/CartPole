@@ -1,6 +1,7 @@
 import numpy as np
 import gym
 import time
+from tqdm import tqdm
 class Qlearning:
     ###########################################################################
     #   START - __init__ function
@@ -79,11 +80,11 @@ class Qlearning:
                 self.Q[self.returnIndexState(state)] == np.max(self.Q[self.returnIndexState(state)]))[0])
 
     def simulateEpisodes(self):
-        for indexEpisode in range(self.numEpisodes):
+        for indexEpisode in tqdm(range(self.numEpisodes), miniters=1):
             rewardsEpisode = []
             (stateS, _) = self.env.reset()
             stateS = list(stateS)
-            print(f'Simulating Episode {indexEpisode}')
+            #print(f'Simulating Episode {indexEpisode}')
             terminalState = False
             while not terminalState:
                 stateSIndex = self.returnIndexState(stateS)
@@ -106,7 +107,7 @@ class Qlearning:
                 stateS = stateSprime
 
 
-            print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
+            #print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
             self.sumRewardsEpisode.append(np.sum(rewardsEpisode))
 
 
