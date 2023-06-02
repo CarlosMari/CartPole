@@ -1,5 +1,6 @@
 
 import gymnasium as gym
+import numpy
 import numpy as np
 from Qlearning_pole import Qlearning
 import os
@@ -62,11 +63,13 @@ import matplotlib.pyplot as plt
 (obtainedRewardsRandom, env2) = Q1.simulateRandomStrategy()
 plt.figure(figsize=(12, 5))
 # plot the figure and adjust the plot parameters
+numpy.save("Qmatrix.npy",Q1.Q)
 plt.plot(Q1.sumRewardsEpisode, color='blue', linewidth=1)
 plt.xlabel('Episode')
 plt.ylabel('Reward')
 plt.yscale('log')
 plt.savefig('convergence.png')
+plt.title("Convergence of rewards")
 plt.show()
 
 

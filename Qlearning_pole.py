@@ -34,10 +34,13 @@ class Qlearning:
         self.numBins = num_bins
         self.lowerBounds = lower_bounds
         self.upperBounds = upper_bounds
-
+        self.rewardsEpisode = 0
         self.sumRewardsEpisode = []
 
         self.Q = np.random.uniform(0, 1, size=(num_bins[0], num_bins[1], num_bins[2], num_bins[3], self.action_number))
+
+
+
 
     # Observation space is not discrete so we make it discrete
     def returnIndexState(self, state):
@@ -67,7 +70,7 @@ class Qlearning:
         randomNumber = np.random.random()
 
         # Decay starts at 55%
-        if index > self.numEpisodes * 0.55:
+        if index > self.numEpisodes * 0.6:
             self.epsilon = 0.999 * self.epsilon
 
         # If satisfied we are exploring
@@ -114,15 +117,18 @@ class Qlearning:
     def simulateLearnedStrategy(self):
         import gym
         import time
-        env1 = gym.make("CartPole-v1", render_mode='human')
+        # Choose this line if you want to see how it behaves
+        #env1 = gym.make("CartPole-v1", render_mode='human')
+        env1 = gym.make("CartPole-v1")
         (currentState, _) = env1.reset()
-        env1.render()
+        # Uncommment if you want it to render the game
+        #env1.render()
         timeSteps = 1000
         # obtained rewards at every time step
         obtainedRewards = []
 
         for timeIndex in range(timeSteps):
-            print(timeIndex)
+            #print(timeIndex)
             # select greedy actions
             actionInStateS = np.random.choice(np.where(self.Q[self.returnIndexState(currentState)] == np.max(
                 self.Q[self.returnIndexState(currentState)]))[0])
@@ -137,25 +143,22 @@ class Qlearning:
     def simulateRandomStrategy(self):
         env2 = gym.make('CartPole-v1')
         (currentState, _) = env2.reset()
-        env2.render()
+        #env2.render()
         # number of simulation episodes
         episodeNumber = 100
         # time steps in every episode
         timeSteps = 1000
         # sum of rewards in each episode
-        sumRewardsEpisodes = []
+        rewardsEpisode = []
 
-        for episodeIndex in range(episodeNumber):
-            rewardsSingleEpisode = []
-            initial_state = env2.reset()
-            print(episodeIndex)
-            for timeIndex in range(timeSteps):
-                random_action = env2.action_space.sample()
-                observation, reward, terminated, truncated, info = env2.step(random_action)
-                rewardsSingleEpisode.append(reward)
-                if (terminated):
-                    break
-            sumRewardsEpisodes.append(np.sum(rewardsSingleEpisode))
-        return sumRewardsEpisodes, env2
+
+        for timeIndex in range(timeSteps):
+            random_action = env2.action_space.sample()
+            observation, reward, terminated, truncated, info = env2.step(random_action)
+            rewardsEpisode.append(reward)
+            if (terminated):
+                break
+
+        return np.sum(rewardsEpisode), env2
 
 
