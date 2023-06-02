@@ -16,7 +16,7 @@ It can be seen that there is an increase in score, with 3 completely different p
 ![plot](./resources/histogram_old.png)
 
 When comparing the results of the trained agent (with 20.000 episodes) to the random agent, the difference becomes clear
-![plot](./resources/boxplot_old.png)]
+![plot](./resources/boxplot_old.png)
 
 As mentioned before the trained agent is still really unconsisted. It is believed that this is due to the randomness of cartpole.
 
