@@ -79,7 +79,10 @@ env1.close()
 np.sum(obtainedRewardsOptimal)
 
 # now simulate a random strategy
-(obtainedRewardsRandom, env2) = Q1.simulateRandomStrategy()
+obtainedRewardsRandom = []
+for i in range(50):
+    (rewardsRandom, env2) = Q1.simulateRandomStrategy()
+    obtainedRewardsRandom.append(rewardsRandom)
 plt.title("Rewards with random strategy")
 plt.hist(obtainedRewardsRandom)
 plt.xlabel('Sum of rewards')
