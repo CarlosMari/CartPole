@@ -3,8 +3,8 @@ This repository is a project in which I seek to take my first steps in reinforce
 My objective is to compare different reinforcement learning ideas from simple algorithms to more complex ones.
 
 The obtained results were the following
-![plot](./convergence.png)
-![plot](./histogram.png)
+![plot](./resources/convergence_old.png)
+![plot](./resources/histogram_old.png)
 
 
 This repository has been heavily inspired in the following:
