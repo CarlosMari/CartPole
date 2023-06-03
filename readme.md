@@ -42,3 +42,7 @@ It should be mention that to speed up the training phase, the experience replay 
 
 As observed by adding experience replay the agent has been able to objectively increase it's score.
 
+## References
+
+https://arxiv.org/pdf/2112.04213.pdf
+https://aleksandarhaber.com/q-learning-in-python-with-tests-in-cart-pole-openai-gym-environment-reinforcement-learning-tutorial/
