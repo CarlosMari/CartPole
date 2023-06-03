@@ -4,6 +4,7 @@ import numpy as np
 import gym
 import time
 from tqdm import tqdm
+import configparser
 class Qlearning:
     ###########################################################################
     #   START - __init__ function
@@ -26,26 +27,48 @@ class Qlearning:
 
     # upperBounds - upper bounds (limits) for discretization, list with 4 entries:
     # upper bounds on cart position, cart velocity, pole angle, and pole angular velocity
-    def __init__(self, env, alpha, gamma, epsilon, num_episodes, num_bins, lower_bounds, upper_bounds):
+    def __init__(self, env = gym.make('CartPole-v1'), file='config.ini'):
         self.env = env
-        self.alpha = alpha
-        self.gamma = gamma
-        self.epsilon = epsilon
-        self.action_number = env.action_space.n
-        self.numEpisodes = num_episodes
-        self.numBins = num_bins
-        self.lowerBounds = lower_bounds
-        self.upperBounds = upper_bounds
+        self.load_values(file)
+
+
+
+    def load_values(self,file):
+        config = configparser.ConfigParser()
+        config.read(file)
+
+        cart_velocity_min = float(config['Parameters']['cart_velocity_min'])
+        cart_velocity_max = float(config['Parameters']['cart_velocity_max'])
+        pole_angle_velocity_min = float(config['Parameters']['pole_angle_velocity_min'])
+        pole_angle_velocity_max = float(config['Parameters']['pole_angle_velocity_max'])
+        number_of_bins_position = int(config['Parameters']['number_of_bins_position'])
+        number_of_bins_velocity = int(config['Parameters']['number_of_bins_velocity'])
+        number_of_bins_angle = int(config['Parameters']['number_of_bins_angle'])
+        number_of_bins_angle_velocity = int(config['Parameters']['number_of_bins_angle_velocity'])
+        self.action_number = self.env.action_space.n
+        self.alpha = float(config['Parameters']['alpha'])
+        self.gamma = float(config['Parameters']['gamma'])
+        self.epsilon = float(config['Parameters']['epsilon'])
+        self.numEpisodes = int(config['Parameters']['number_episodes'])
+
+        self.upperBounds = self.env.observation_space.high
+        self.lowerBounds = self.env.observation_space.low
+        self.upperBounds[1] = cart_velocity_max
+        self.upperBounds[3] = pole_angle_velocity_max
+        self.lowerBounds[1] = cart_velocity_min
+        self.lowerBounds[3] = pole_angle_velocity_min
+
+        self.batch_size = int(config['Parameters']['batch_size'])
+
         self.rewardsEpisode = 0
         self.sumRewardsEpisode = []
 
-        self.replayBuffer = [] #For experience replay
-        self.batchSize = 32
+        # Update the number of bins
+        self.num_bins = [number_of_bins_position, number_of_bins_velocity, number_of_bins_angle,
+                         number_of_bins_angle_velocity]
 
-        self.Q = np.random.uniform(0, 1, size=(num_bins[0], num_bins[1], num_bins[2], num_bins[3], self.action_number))
-
-
-
+        self.replayBuffer = []
+        self.Q = np.random.uniform(0, 1, size=(self.num_bins[0], self.num_bins[1], self.num_bins[2], self.num_bins[3], self.action_number))
 
     # Observation space is not discrete so we make it discrete
     def returnIndexState(self, state):
@@ -54,10 +77,10 @@ class Qlearning:
         angle = state[2]
         angularVelocity = state[3]
 
-        cartPositionBin = np.linspace(self.lowerBounds[0], self.upperBounds[0], self.numBins[0])
-        cartVelocityBin = np.linspace(self.lowerBounds[1], self.upperBounds[1], self.numBins[1])
-        cartAngleBin = np.linspace(self.lowerBounds[2], self.upperBounds[2], self.numBins[2])
-        cartAngularVelocityBin = np.linspace(self.lowerBounds[3], self.upperBounds[3], self.numBins[3])
+        cartPositionBin = np.linspace(self.lowerBounds[0], self.upperBounds[0], self.num_bins[0])
+        cartVelocityBin = np.linspace(self.lowerBounds[1], self.upperBounds[1], self.num_bins[1])
+        cartAngleBin = np.linspace(self.lowerBounds[2], self.upperBounds[2], self.num_bins[2])
+        cartAngularVelocityBin = np.linspace(self.lowerBounds[3], self.upperBounds[3], self.num_bins[3])
 
         indexPosition = np.maximum(np.digitize(position, cartPositionBin) - 1, 0)
         indexVelocity = np.maximum(np.digitize(velocity, cartVelocityBin) - 1, 0)
@@ -87,7 +110,7 @@ class Qlearning:
             return np.random.choice(np.where(
                 self.Q[self.returnIndexState(state)] == np.max(self.Q[self.returnIndexState(state)]))[0])
 
-    def simulateEpisodes(self):
+    def train(self):
         for indexEpisode in tqdm(range(self.numEpisodes)):#, miniters=1):
         #for indexEpisode in range(self.numEpisodes):
             rewardsEpisode = []
@@ -128,11 +151,11 @@ class Qlearning:
 
 
     def updateQValues(self):
-        if len(self.replayBuffer)<self.batchSize:
+        if len(self.replayBuffer)<self.batch_size:
             return
 
         # Select a random batch of experiences
-        batch = random.sample(self.replayBuffer,self.batchSize)
+        batch = random.sample(self.replayBuffer, self.batch_size)
 
         for experience in batch:
             state,action,reward,next_state,done = experience
@@ -147,15 +170,14 @@ class Qlearning:
                 error = reward - self.Q[stateIndex + (actionIndex,)]
             self.Q[stateIndex + (actionIndex,)] += self.alpha * error
 
-    def simulateLearnedStrategy(self):
+    def simulateLearnedStrategy(self,env1 = gym.make("CartPole-v1"), render=False):
         import gym
         import time
         # Choose this line if you want to see how it behaves
         #env1 = gym.make("CartPole-v1", render_mode='human')
-        env1 = gym.make("CartPole-v1")
         (currentState, _) = env1.reset()
-        # Uncommment if you want it to render the game
-        #env1.render()
+        if render:
+            env1.render()
         timeSteps = 3000
         steps = 0
         # obtained rewards at every time step

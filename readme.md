@@ -2,6 +2,17 @@
 
 This repository is a project focused on exploring reinforcement learning techniques using the OpenAI Gym environment. The objective is to compare different algorithms and approaches to improve the performance of an agent in the Cartpole task.
 
+## Installation
+Installation of packages
+```
+pip install -r requirements.txt
+```
+
+If you want to execute the the training phase and get your own model execute the main program, the hyperparameters and different options can be changes via config.ini file.
+
+If you just want to watch the trained model play the game execute
+
+
 ## Objectives
 
 The main objectives of this project are as follows:

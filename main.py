@@ -8,49 +8,10 @@ import os
 # Rendering the environment
 # env=gym.make('CartPole-v1',render_mode='human')
 
-# Non rendering
-import configparser
-#import gym
 
-# Load parameters from config file
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-cart_velocity_min = float(config['Parameters']['cart_velocity_min'])
-cart_velocity_max = float(config['Parameters']['cart_velocity_max'])
-pole_angle_velocity_min = float(config['Parameters']['pole_angle_velocity_min'])
-pole_angle_velocity_max = float(config['Parameters']['pole_angle_velocity_max'])
-number_of_bins_position = int(config['Parameters']['number_of_bins_position'])
-number_of_bins_velocity = int(config['Parameters']['number_of_bins_velocity'])
-number_of_bins_angle = int(config['Parameters']['number_of_bins_angle'])
-number_of_bins_angle_velocity = int(config['Parameters']['number_of_bins_angle_velocity'])
-alpha = float(config['Parameters']['alpha'])
-gamma = float(config['Parameters']['gamma'])
-epsilon = float(config['Parameters']['epsilon'])
-number_episodes = int(config['Parameters']['number_episodes'])
-
-# Create the environment
-env = gym.make('CartPole-v1')
-(state, _) = env.reset()
-
-# Update the observation space bounds
-upperBounds = env.observation_space.high
-lowerBounds = env.observation_space.low
-upperBounds[1] = cart_velocity_max
-upperBounds[3] = pole_angle_velocity_max
-lowerBounds[1] = cart_velocity_min
-lowerBounds[3] = pole_angle_velocity_min
-
-# Update the number of bins
-numberOfBins = [number_of_bins_position, number_of_bins_velocity, number_of_bins_angle, number_of_bins_angle_velocity]
-
-
-
-
-# create an object
-Q1 = Qlearning(env, alpha, gamma, epsilon, number_episodes, numberOfBins, lowerBounds, upperBounds)
+Q1 = Qlearning()
 # run the Q-Learning algorithm
-Q1.simulateEpisodes()
+Q1.train()
 # simulate the learned strategy
 (obtainedRewardsOptimal, env1) = Q1.simulateLearnedStrategy()
 
@@ -63,7 +24,7 @@ import matplotlib.pyplot as plt
 (obtainedRewardsRandom, env2) = Q1.simulateRandomStrategy()
 plt.figure(figsize=(12, 5))
 # plot the figure and adjust the plot parameters
-numpy.save("Qmatrix.npy",Q1.Q)
+numpy.save("Qmatrix_new.npy",Q1.Q)
 plt.plot(Q1.sumRewardsEpisode, color='blue', linewidth=1)
 plt.xlabel('Episode')
 plt.ylabel('Reward')

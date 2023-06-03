@@ -1,0 +1,6 @@
+gym==0.26.2
+gymnasium==0.28.1
+matplotlib==3.7.1
+numba==0.57.0
+numpy==1.23.5
+tqdm==4.65.0
