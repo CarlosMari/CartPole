@@ -44,7 +44,7 @@ Despite the improvements, the trained agent still lacks consistency. This incons
 Experience replay has been implemented in this project, leading to significant improvements in the agent's performance. The details and results of this implementation are yet to be provided.
 
 The results of the trained agent with experience replay are as follows:
-
+It should be mention that to speed up the training phase, the experience replay agent had a score limit of 2000.
 | Metric                 | Old Agent | Trained Agent with Experience Replay |
 |------------------------|--------------|--------------------------------------|
 | Convergence Plot       | ![Convergence Plot](./resources/convergence_old.png) | ![Convergence Plot](./resources/convergence20kbuffer.png) |
@@ -53,3 +53,7 @@ The results of the trained agent with experience replay are as follows:
 
 As observed by adding experience replay the agent has been able to objectively increase it's score.
 
+## References
+
+- https://arxiv.org/pdf/2112.04213.pdf
+- https://aleksandarhaber.com/q-learning-in-python-with-tests-in-cart-pole-openai-gym-environment-reinforcement-learning-tutorial/
