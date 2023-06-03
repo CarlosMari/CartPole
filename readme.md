@@ -44,5 +44,5 @@ As observed by adding experience replay the agent has been able to objectively i
 
 ## References
 
-https://arxiv.org/pdf/2112.04213.pdf
-https://aleksandarhaber.com/q-learning-in-python-with-tests-in-cart-pole-openai-gym-environment-reinforcement-learning-tutorial/
+-https://arxiv.org/pdf/2112.04213.pdf
+-https://aleksandarhaber.com/q-learning-in-python-with-tests-in-cart-pole-openai-gym-environment-reinforcement-learning-tutorial/
