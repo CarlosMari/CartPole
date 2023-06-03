@@ -10,7 +10,11 @@ pip install -r requirements.txt
 
 If you want to execute the the training phase and get your own model execute the main program, the hyperparameters and different options can be changes via config.ini file.
 
-If you just want to watch the trained model play the game execute
+If you just want to watch the trained model play the game execute the following
+
+```
+python3 watchModel.py
+```
 
 
 ## Objectives
