@@ -1,25 +1,44 @@
-# Cartpole
-### Introduction
-This repository is a project in which I seek to take my first steps in reinforcement learning via OpenAI gym. 
-My objective is to compare different reinforcement learning ideas from simple algorithms to more complex ones.
+# Cartpole Reinforcement Learning
 
-### Objectives
-- Achieve a working model in which there is evidence that training increases survival time
-- Experiment with different algorithms and compare training time, complexity and achieved score.
-- Fine tune the parameters and required number of bins to achieve an optimal training.
-- Achive a more consistent strategy.
+This repository is a project focused on exploring reinforcement learning techniques using the OpenAI Gym environment. The objective is to compare different algorithms and approaches to improve the performance of an agent in the Cartpole task.
 
-### Results
-So far only the only RL algorithm used has been Q-Learning obtaining the following results.
-![plot](./resources/convergence_old.png)
-It can be seen that there is an increase in score, with 3 completely different parts. The first part belongs to random inputs, second part to a model that exploresa lot. The third part is when the epsilon starts to decay.
-![plot](./resources/histogram_old.png)
+## Objectives
 
-When comparing the results of the trained agent (with 20.000 episodes) to the random agent, the difference becomes clear
-![plot](./resources/boxplot_old.png)
+The main objectives of this project are as follows:
 
-As mentioned before the trained agent is still really unconsisted. It is believed that this is due to the randomness of cartpole.
+1. Develop a working model that demonstrates an increase in survival time through training.
+2. Experiment with different reinforcement learning algorithms and compare their training time, complexity, and achieved scores.
+3. Fine-tune the algorithm parameters and the number of bins used to achieve optimal training results.
+4. Improve the consistency of the trained agent's strategy.
+5. Implement experience replay to enhance learning.
 
-This repository has been heavily inspired in the following:
-https://aleksandarhaber.com/q-learning-in-python-with-tests-in-cart-pole-openai-gym-environment-reinforcement-learnin
+## Results
+
+The initial approach used in this project was Q-Learning, and it produced the following results:
+
+![Convergence Plot](./resources/convergence_old.png)
+
+The convergence plot shows an increase in the score over time, with three distinct phases. The first phase corresponds to random inputs, followed by a phase where the model explores a lot. The third phase occurs when the epsilon value starts to decay.
+
+![Score Histogram](./resources/histogram_old.png)
+
+Comparing the results of the trained agent (after 20,000 episodes) with a random agent clearly demonstrates the improvement achieved:
+
+![Score Boxplot](./resources/boxplot_old.png)
+
+Despite the improvements, the trained agent still lacks consistency. This inconsistency is believed to be due to the inherent randomness in the Cartpole environment.
+
+## Experience Replay
+
+Experience replay has been implemented in this project, leading to significant improvements in the agent's performance. The details and results of this implementation are yet to be provided.
+
+The results of the trained agent with experience replay are as follows:
+
+| Metric                 | Old Agent | Trained Agent with Experience Replay |
+|------------------------|--------------|--------------------------------------|
+| Convergence Plot       | ![Convergence Plot](./resources/convergence_old.png) | ![Convergence Plot](./resources/convergence20kbuffer.png) |
+| Score Histogram        | ![Score Histogram](./resources/old_agent20k.png) | ![Score Histogram](./resources/trained_agent20k.png) |
+|Boxplot|![Score Boxplot](./resources/old_boxplot.png)| ![Score Boxplot](./resources/boxplot.png)|
+
+As observed by adding experience replay the agent has been able to objectively increase it's score.
 

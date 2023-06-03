@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import gym
 import time
@@ -36,6 +38,9 @@ class Qlearning:
         self.upperBounds = upper_bounds
         self.rewardsEpisode = 0
         self.sumRewardsEpisode = []
+
+        self.replayBuffer = [] #For experience replay
+        self.batchSize = 32
 
         self.Q = np.random.uniform(0, 1, size=(num_bins[0], num_bins[1], num_bins[2], num_bins[3], self.action_number))
 
@@ -83,19 +88,26 @@ class Qlearning:
                 self.Q[self.returnIndexState(state)] == np.max(self.Q[self.returnIndexState(state)]))[0])
 
     def simulateEpisodes(self):
-        for indexEpisode in tqdm(range(self.numEpisodes), miniters=1):
+        for indexEpisode in tqdm(range(self.numEpisodes)):#, miniters=1):
+        #for indexEpisode in range(self.numEpisodes):
             rewardsEpisode = []
             (stateS, _) = self.env.reset()
             stateS = list(stateS)
             #print(f'Simulating Episode {indexEpisode}')
             terminalState = False
-            while not terminalState:
+            steps = 0
+            # Add a steps limiter to shorten training time
+            while not terminalState and steps < 2000:
+                steps += 1
                 stateSIndex = self.returnIndexState(stateS)
                 actionA = self.selectAction(stateS, indexEpisode)
 
                 (stateSprime, reward, terminalState, _, _) = self.env.step(actionA)
                 rewardsEpisode.append(reward)
                 stateSprime = list(stateSprime)
+
+                # Store the experience in the buffer
+                self.replayBuffer.append([stateS,actionA,reward,stateSprime,terminalState])
 
                 stateSprimeIndex = self.returnIndexState(stateSprime)
 
@@ -109,10 +121,31 @@ class Qlearning:
 
                 stateS = stateSprime
 
-
+            if indexEpisode % 5 == 0:
+                self.updateQValues()
             #print("Sum of rewards {}".format(np.sum(rewardsEpisode)))
             self.sumRewardsEpisode.append(np.sum(rewardsEpisode))
 
+
+    def updateQValues(self):
+        if len(self.replayBuffer)<self.batchSize:
+            return
+
+        # Select a random batch of experiences
+        batch = random.sample(self.replayBuffer,self.batchSize)
+
+        for experience in batch:
+            state,action,reward,next_state,done = experience
+            stateIndex = self.returnIndexState(state)
+            actionIndex = action
+
+            if not done:
+                next_stateIndex = self.returnIndexState(next_state)
+                QmaxPrime = np.max(self.Q[next_stateIndex])
+                error = reward + self.gamma * QmaxPrime - self.Q[stateIndex + (actionIndex,)]
+            else:
+                error = reward - self.Q[stateIndex + (actionIndex,)]
+            self.Q[stateIndex + (actionIndex,)] += self.alpha * error
 
     def simulateLearnedStrategy(self):
         import gym
@@ -123,11 +156,14 @@ class Qlearning:
         (currentState, _) = env1.reset()
         # Uncommment if you want it to render the game
         #env1.render()
-        timeSteps = 1000
+        timeSteps = 3000
+        steps = 0
         # obtained rewards at every time step
         obtainedRewards = []
-
-        for timeIndex in range(timeSteps):
+        terminated = False
+        truncated = False
+        while (not (terminated or truncated)) or steps < timeSteps:
+            steps+=1
             #print(timeIndex)
             # select greedy actions
             actionInStateS = np.random.choice(np.where(self.Q[self.returnIndexState(currentState)] == np.max(

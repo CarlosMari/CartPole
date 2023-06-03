@@ -160,3 +160,4 @@ cython_debug/
 .idea/
 /shelf/
 /workspace.xml
+*.npy
